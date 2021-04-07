@@ -1,1 +1,7 @@
-<p>minesweeper works!</p>
+<table>
+    <tbody>
+        <tr *ngFor="let row of field; index as i;">
+            <td *ngFor="let square of field[i]">{{ square.value }}</td>
+        </tr>
+    </tbody>
+</table>
