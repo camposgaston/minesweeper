@@ -86,7 +86,7 @@ export class MinesweeperComponent implements OnInit {
   calculateAdjSquares(row: number, col: number): number[][] {
     return this.AdjPositions
       .map(position => [row + position[0], col + position[1]])
-      .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1)
+      .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1);
   }
 
   getClasses(value: number, status: string): string {
@@ -133,8 +133,8 @@ export class MinesweeperComponent implements OnInit {
     }
     this.evaluateSolution();
   }
-  evaluateSolution() {
-    let evalSolved: boolean = true;
+  evaluateSolution(): void {
+    let evalSolved = true;
     this.field.forEach(arr => {
       arr.forEach(a => {
         if (a.status !== 'visible' && a.value !== 9) {
@@ -146,7 +146,7 @@ export class MinesweeperComponent implements OnInit {
       this.solvedGame();
     }
   }
-  solvedGame() {
+  solvedGame(): void {
     this.solved = true;
   }
 }
