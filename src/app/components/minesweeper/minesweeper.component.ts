@@ -22,18 +22,16 @@ export class MinesweeperComponent implements OnInit {
     this.createField();
   }
 
-
   createField(): void {
-
     for (let row = 0; row < this.rows; row++) {
       this.field[row] = [];
-
       for (let col = 0; col < this.cols; col++) {
         this.field[row][col] = new Square();
       }
     }
     this.asignMines();
     this.calculateAdjMines();
+    this.calculateAdjToShow();
     console.log(this.field);
   }
 
@@ -64,7 +62,7 @@ export class MinesweeperComponent implements OnInit {
         if (this.field[row][col].value < 9) {
           const adjMines: number = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
             .map(position => [row + position[0], col + position[1]])
-            .filter(filterPosition => filterPosition[0] >= 0 && filterPosition[0] <= this.rows - 1 && filterPosition[1] >= 0 && filterPosition[1] <= this.cols - 1)
+            .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1)
             .reduce((acum, redPosition) => this.field[redPosition[0]][redPosition[1]].value === 9 ? ++acum : acum, 0);
           this.field[row][col].value = adjMines;
         }
@@ -72,6 +70,22 @@ export class MinesweeperComponent implements OnInit {
     }
   }
 
+  calculateAdjToShow(): void {
+    for (let row = 0; row < this.rows; row++) {
+      for (let col = 0; col < this.cols; col++) {
+        if (this.field[row][col].value === 0) {
+          const adjToShow: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+            .map(position => [row + position[0], col + position[1]])
+            .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1)
+            .filter(p => this.field[p[0]][p[1]].value === 0);
+          this.field[row][col].showsAdj = adjToShow;
+        }
+      }
+    }
+  }
 
+  getClasses(value: number, status: string): string {
+    return `square-${value} ${status}`;
+  }
 
 }
