@@ -14,6 +14,7 @@ export class MinesweeperComponent implements OnInit {
   mines = 9;
   field: any[][];
   AdjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+  availableMines: number = 9;
 
   constructor() {
     this.field = [];
@@ -33,7 +34,7 @@ export class MinesweeperComponent implements OnInit {
     this.asignMines();
     this.calculateAdjMines();
     this.calculateAllAdjToShow();
-    console.log(this.field);
+    this.availableMines = this.mines;
   }
 
   randomIntFromInterval(min: number, max: number): number {
@@ -92,15 +93,19 @@ export class MinesweeperComponent implements OnInit {
     return `square-${value} ${status}`;
   }
 
-  uncover(row: number, col: number) {
-    this.field[row][col].status = 'visible';
-    if (this.field[row][col].value === 9) {
-      this.field[row][col].status = 'detonated';
-    }
-    if (this.field[row][col].value === 0) {
-      this.showAdjToShow(this.field[row][col].showsAdj);
+  uncover(row: number, col: number): void {
+    if (this.field[row][col].status === 'hidden') {
+      this.field[row][col].status = 'visible';
+      if (this.field[row][col].value === 9) {        
+        this.field.forEach(arr => { arr.forEach(a => a.status = 'visible') })
+        this.field[row][col].status = 'detonated detonation';
+      }
+      if (this.field[row][col].value === 0) {
+        this.showAdjToShow(this.field[row][col].showsAdj);
+      }
     }
   }
+
   showAdjToShow(showsAdj: number[][]) {
     let allSquaresToShow = [...showsAdj];
     do {
@@ -113,5 +118,14 @@ export class MinesweeperComponent implements OnInit {
         }
       });
     } while (allSquaresToShow.length > 0);
+  }
+
+  flag(row: number, col: number): void {
+    if (this.field[row][col].status === 'hidden' && this.availableMines > 0) {
+      this.field[row][col].status = 'hidden flagged';
+      this.availableMines--;
+    } else if (this.field[row][col].status === 'hidden flagged') {
+      this.field[row][col].status = 'hidden';
+    }
   }
 }
