@@ -14,7 +14,8 @@ export class MinesweeperComponent implements OnInit {
   mines = 9;
   field: any[][];
   AdjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
-  availableMines = 9;
+  activeMines = 9;
+  solved = false;
 
   constructor() {
     this.field = [];
@@ -34,7 +35,7 @@ export class MinesweeperComponent implements OnInit {
     this.asignMines();
     this.calculateAdjMines();
     this.calculateAllAdjToShow();
-    this.availableMines = this.mines;
+    this.activeMines = this.mines;
   }
 
   randomIntFromInterval(min: number, max: number): number {
@@ -95,12 +96,15 @@ export class MinesweeperComponent implements OnInit {
   uncover(row: number, col: number): void {
     if (this.field[row][col].status === 'hidden') {
       this.field[row][col].status = 'visible';
+
+      if (this.field[row][col].value === 0) {
+        this.showAdjSquares(this.field[row][col].showsAdj);
+      }
       if (this.field[row][col].value === 9) {
         this.field.forEach(arr => { arr.forEach(a => a.status = 'visible'); });
         this.field[row][col].status = 'detonated detonation';
-      }
-      if (this.field[row][col].value === 0) {
-        this.showAdjSquares(this.field[row][col].showsAdj);
+      } else {
+        this.evaluateSolution();
       }
     }
   }
@@ -121,11 +125,28 @@ export class MinesweeperComponent implements OnInit {
   }
 
   flag(row: number, col: number): void {
-    if (this.field[row][col].status === 'hidden' && this.availableMines > 0) {
+    if (this.field[row][col].status === 'hidden' && this.activeMines > 0) {
       this.field[row][col].status = 'hidden flagged';
-      this.availableMines--;
+      this.activeMines--;
     } else if (this.field[row][col].status === 'hidden flagged') {
       this.field[row][col].status = 'hidden';
     }
+    this.evaluateSolution();
+  }
+  evaluateSolution() {
+    let evalSolved: boolean = true;
+    this.field.forEach(arr => {
+      arr.forEach(a => {
+        if (a.status !== 'visible' && a.value !== 9) {
+          evalSolved = false;
+        }
+      });
+    });
+    if (evalSolved) {
+      this.solvedGame();
+    }
+  }
+  solvedGame() {
+    this.solved = true;
   }
 }
