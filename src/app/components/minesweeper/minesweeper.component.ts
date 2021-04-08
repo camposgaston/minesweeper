@@ -13,7 +13,7 @@ export class MinesweeperComponent implements OnInit {
   cols = 10;
   mines = 9;
   field: any[][];
-  AdjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+  adjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   activeMines = 9;
   solved = false;
 
@@ -63,7 +63,7 @@ export class MinesweeperComponent implements OnInit {
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
         if (this.field[row][col].value < 9) {
-          const adjMines: number = this.AdjPositions
+          const adjMines: number = this.adjPositions
             .map(position => [row + position[0], col + position[1]])
             .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1)
             .reduce((acum, redPosition) => this.field[redPosition[0]][redPosition[1]].value === 9 ? ++acum : acum, 0);
@@ -84,7 +84,7 @@ export class MinesweeperComponent implements OnInit {
   }
 
   calculateAdjSquares(row: number, col: number): number[][] {
-    return this.AdjPositions
+    return this.adjPositions
       .map(position => [row + position[0], col + position[1]])
       .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1);
   }
