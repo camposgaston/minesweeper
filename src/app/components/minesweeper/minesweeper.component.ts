@@ -76,17 +76,16 @@ export class MinesweeperComponent implements OnInit {
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
         if (this.field[row][col].value === 0) {
-          this.field[row][col].showsAdj = this.calculateAdjToShow(row, col);
+          this.field[row][col].showsAdj = this.calculateAdjSquares(row, col);
         }
       }
     }
   }
 
-  calculateAdjToShow(row: number, col: number): number[][] {
+  calculateAdjSquares(row: number, col: number): number[][] {
     return this.AdjPositions
       .map(position => [row + position[0], col + position[1]])
       .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1)
-      .filter(p => this.field[p[0]][p[1]].value === 0);
   }
 
   getClasses(value: number, status: string): string {
@@ -101,21 +100,22 @@ export class MinesweeperComponent implements OnInit {
         this.field[row][col].status = 'detonated detonation';
       }
       if (this.field[row][col].value === 0) {
-        this.showAdjToShow(this.field[row][col].showsAdj);
+        this.showAdjSquares(this.field[row][col].showsAdj);
       }
     }
   }
 
-  showAdjToShow(showsAdj: number[][]): void {
+  showAdjSquares(showsAdj: number[][]): void {
     let allSquaresToShow = [...showsAdj];
     do {
       allSquaresToShow.forEach(array => {
-        const arrayToAdd = this.calculateAdjToShow(array[0], array[1]);
-        if (arrayToAdd !== []) {
-          allSquaresToShow = [...allSquaresToShow, ...arrayToAdd]
-            .filter(p => this.field[p[0]][p[1]].status !== 'visible');
-          this.field[array[0]][array[1]].status = 'visible';
+        let arrayToAdd: number[][] = [];
+        if (this.field[array[0]][array[1]].value === 0) {
+          arrayToAdd = this.calculateAdjSquares(array[0], array[1]);
         }
+        allSquaresToShow = [...allSquaresToShow, ...arrayToAdd]
+          .filter(p => this.field[p[0]][p[1]].status !== 'visible');
+        this.field[array[0]][array[1]].status = 'visible';
       });
     } while (allSquaresToShow.length > 0);
   }
