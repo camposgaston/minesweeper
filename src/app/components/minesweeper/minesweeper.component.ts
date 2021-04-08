@@ -14,7 +14,7 @@ export class MinesweeperComponent implements OnInit {
   mines = 9;
   field: any[][];
   AdjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
-  availableMines: number = 9;
+  availableMines = 9;
 
   constructor() {
     this.field = [];
@@ -96,8 +96,8 @@ export class MinesweeperComponent implements OnInit {
   uncover(row: number, col: number): void {
     if (this.field[row][col].status === 'hidden') {
       this.field[row][col].status = 'visible';
-      if (this.field[row][col].value === 9) {        
-        this.field.forEach(arr => { arr.forEach(a => a.status = 'visible') })
+      if (this.field[row][col].value === 9) {
+        this.field.forEach(arr => { arr.forEach(a => a.status = 'visible'); });
         this.field[row][col].status = 'detonated detonation';
       }
       if (this.field[row][col].value === 0) {
@@ -106,15 +106,15 @@ export class MinesweeperComponent implements OnInit {
     }
   }
 
-  showAdjToShow(showsAdj: number[][]) {
+  showAdjToShow(showsAdj: number[][]): void {
     let allSquaresToShow = [...showsAdj];
     do {
       allSquaresToShow.forEach(array => {
-        let arrayToAdd = this.calculateAdjToShow(array[0], array[1]);
+        const arrayToAdd = this.calculateAdjToShow(array[0], array[1]);
         if (arrayToAdd !== []) {
           allSquaresToShow = [...allSquaresToShow, ...arrayToAdd]
             .filter(p => this.field[p[0]][p[1]].status !== 'visible');
-          this.field[array[0]][array[1]].status = 'visible'
+          this.field[array[0]][array[1]].status = 'visible';
         }
       });
     } while (allSquaresToShow.length > 0);
