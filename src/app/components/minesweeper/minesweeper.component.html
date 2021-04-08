@@ -1,7 +1,8 @@
 <table>
     <tbody>
         <tr *ngFor="let row of field; index as i;">
-            <td [ngClass]="getClasses(square.value,square.status)" (click)="uncover(i,j)" *ngFor="let square of field[i]; index as j;">{{ square.value }}</td>
+            <td [ngClass]="getClasses(square.value,square.status)" (contextmenu)="flag(i,j)" oncontextmenu="return false" (click)="uncover(i,j)" *ngFor="let square of field[i]; index as j;">
+            </td>
         </tr>
     </tbody>
 </table>

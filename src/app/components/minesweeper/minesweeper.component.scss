@@ -1,14 +1,31 @@
+@import url("../../../../node_modules/font-awesome/css/font-awesome.min.css");
 td {
-    width: 25px;
-    height: 25px;
+    width: 15px;
+    height: 15px;
     border: 0.1px solid black;
     text-align: center;
+    font-size: 15px;
     &.visible {
-        $squareColors: ( 0: yellow, 1: DodgerBlue, 2: MediumSeaGreen, 3: Orange, 4: SlateBlue, 5: LightGray, 6: rgb(44, 89, 102), 7: Tomato, 8: black, 9: red, );
+        $squareColors: ( 0: yellow, 1: DodgerBlue, 2: MediumSeaGreen, 3: Orange, 4: SlateBlue, 5: LightGray, 6: rgb(44, 89, 102), 7: Tomato, 8: red, 9: black, );
         @each $name,
         $value in $squareColors {
             &.square-#{$name} {
-                background-color: $value;
+                font-family: Arial, Helvetica, sans-serif;
+                @if $name==9 {
+                    font-family: "FontAwesome";
+                }
+                color: $value;
+                background-color: lightgray;
+                font-weight: 600;
+            }
+            &.square-#{$name}:after {
+                content: "#{$name}";
+                @if $name==0 {
+                    content: "";
+                }
+                @if $name==9 {
+                    content: "\f0a3";
+                }
             }
         }
     }
@@ -17,8 +34,21 @@ td {
         // text-indent: 100%;
         // white-space: nowrap;
         // overflow: hidden;
+        &.flagged {
+            font-family: "FontAwesome";
+            color: black;
+        }
+        &.flagged:after {
+            content: "\f024";
+        }
     }
     &.detonated {
-        background-color: red;
+        background-color: red !important;
+        &.detonation {
+            font-family: "FontAwesome";
+        }
+        &.detonation:after {
+            content: "\f0a3";
+        }
     }
 }
