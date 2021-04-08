@@ -131,7 +131,6 @@ export class MinesweeperComponent implements OnInit {
     } else if (this.field[row][col].status === 'hidden flagged') {
       this.field[row][col].status = 'hidden';
     }
-    this.evaluateSolution();
   }
   evaluateSolution(): void {
     let evalSolved = true;
