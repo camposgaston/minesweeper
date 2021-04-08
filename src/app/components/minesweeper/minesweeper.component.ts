@@ -13,6 +13,7 @@ export class MinesweeperComponent implements OnInit {
   cols = 10;
   mines = 9;
   field: any[][];
+  AdjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 
   constructor() {
     this.field = [];
@@ -31,7 +32,7 @@ export class MinesweeperComponent implements OnInit {
     }
     this.asignMines();
     this.calculateAdjMines();
-    this.calculateAdjToShow();
+    this.calculateAllAdjToShow();
     console.log(this.field);
   }
 
@@ -60,7 +61,7 @@ export class MinesweeperComponent implements OnInit {
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
         if (this.field[row][col].value < 9) {
-          const adjMines: number = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+          const adjMines: number = this.AdjPositions
             .map(position => [row + position[0], col + position[1]])
             .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1)
             .reduce((acum, redPosition) => this.field[redPosition[0]][redPosition[1]].value === 9 ? ++acum : acum, 0);
@@ -70,22 +71,47 @@ export class MinesweeperComponent implements OnInit {
     }
   }
 
-  calculateAdjToShow(): void {
+  calculateAllAdjToShow(): void | number[][] {
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
         if (this.field[row][col].value === 0) {
-          const adjToShow: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
-            .map(position => [row + position[0], col + position[1]])
-            .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1)
-            .filter(p => this.field[p[0]][p[1]].value === 0);
-          this.field[row][col].showsAdj = adjToShow;
+          this.field[row][col].showsAdj = this.calculateAdjToShow(row, col);
         }
       }
     }
+  }
+
+  calculateAdjToShow(row: number, col: number): number[][] {
+    return this.AdjPositions
+      .map(position => [row + position[0], col + position[1]])
+      .filter(p => p[0] >= 0 && p[0] <= this.rows - 1 && p[1] >= 0 && p[1] <= this.cols - 1)
+      .filter(p => this.field[p[0]][p[1]].value === 0);
   }
 
   getClasses(value: number, status: string): string {
     return `square-${value} ${status}`;
   }
 
+  uncover(row: number, col: number) {
+    this.field[row][col].status = 'visible';
+    if (this.field[row][col].value === 9) {
+      this.field[row][col].status = 'detonated';
+    }
+    if (this.field[row][col].value === 0) {
+      this.showAdjToShow(this.field[row][col].showsAdj);
+    }
+  }
+  showAdjToShow(showsAdj: number[][]) {
+    let allSquaresToShow = [...showsAdj];
+    do {
+      allSquaresToShow.forEach(array => {
+        let arrayToAdd = this.calculateAdjToShow(array[0], array[1]);
+        if (arrayToAdd !== []) {
+          allSquaresToShow = [...allSquaresToShow, ...arrayToAdd]
+            .filter(p => this.field[p[0]][p[1]].status !== 'visible');
+          this.field[array[0]][array[1]].status = 'visible'
+        }
+      });
+    } while (allSquaresToShow.length > 0);
+  }
 }

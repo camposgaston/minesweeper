@@ -1,7 +1,7 @@
 <table>
     <tbody>
         <tr *ngFor="let row of field; index as i;">
-            <td [ngClass]="getClasses(square.value,square.status)" *ngFor="let square of field[i]">{{ square.value }}</td>
+            <td [ngClass]="getClasses(square.value,square.status)" (click)="uncover(i,j)" *ngFor="let square of field[i]; index as j;">{{ square.value }}</td>
         </tr>
     </tbody>
 </table>
