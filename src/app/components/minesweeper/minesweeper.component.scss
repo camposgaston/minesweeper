@@ -1,4 +1,13 @@
 @import url("../../../../node_modules/font-awesome/css/font-awesome.min.css");
+tr {
+    &.data {
+        td {
+            text-align: center;
+            width: auto;
+        }
+    }
+}
+
 td {
     width: 17px;
     height: 17px;

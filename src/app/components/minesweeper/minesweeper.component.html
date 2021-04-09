@@ -1,5 +1,14 @@
 <table>
     <tbody>
+        <tr class="data">
+            <td> Player: PLayer Name</td>
+            <td> Remaining <i class="fa fa-flag"></i> {{availableFlags}}</td>
+            <td> time 00:00</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <tbody>
         <tr *ngFor="let row of field; index as i;">
             <td [ngClass]="getClasses(square.value,square.status)" (contextmenu)="flag(i,j)" oncontextmenu="return false" (click)="uncover(i,j)" *ngFor="let square of field[i]; index as j;">
             </td>
