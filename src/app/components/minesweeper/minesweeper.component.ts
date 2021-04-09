@@ -14,7 +14,7 @@ export class MinesweeperComponent implements OnInit {
   mines = 9;
   field: ISquare[][];
   adjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
-  activeMines = 9;
+  availableFlags = 9;
   solved = false;
 
   constructor() {
@@ -35,7 +35,7 @@ export class MinesweeperComponent implements OnInit {
     this.asignMines();
     this.calculateAdjMines();
     this.calculateAllAdjToShow();
-    this.activeMines = this.mines;
+    this.availableFlags = this.mines;
   }
 
   randomIntFromInterval(min: number, max: number): number {
@@ -125,11 +125,12 @@ export class MinesweeperComponent implements OnInit {
   }
 
   flag(row: number, col: number): void {
-    if (this.field[row][col].status === 'hidden' && this.activeMines > 0) {
+    if (this.field[row][col].status === 'hidden' && this.availableFlags > 0) {
       this.field[row][col].status = 'hidden flagged';
-      this.activeMines--;
+      this.availableFlags--;
     } else if (this.field[row][col].status === 'hidden flagged') {
       this.field[row][col].status = 'hidden';
+      this.availableFlags++;
     }
   }
   evaluateSolution(): void {
