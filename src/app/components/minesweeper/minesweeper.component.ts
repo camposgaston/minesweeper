@@ -107,7 +107,9 @@ export class MinesweeperComponent implements OnInit {
       if (this.field[row][col].value === 9) {
         this.field.forEach(arr => { arr.forEach(a => a.status = 'visible'); });
         this.field[row][col].status = 'detonated detonation';
-        this.localstorageService.saveScore(100, 'Gaston', 'Easy', 100, '2021-05-04 08:08:00', '2021-05-04 08:08:00', 55, 'Lost');
+        this.localstorageService.saveScore(this.randomIntFromInterval(0, 100),
+          'Gaston', 'Easy', this.randomIntFromInterval(0, 100), '2021-05-04 08:08:00', '2021-05-04 08:08:00',
+          this.randomIntFromInterval(0, 3600), 'Lost');
       } else {
         this.evaluateSolution();
       }
@@ -153,6 +155,8 @@ export class MinesweeperComponent implements OnInit {
   }
   solvedGame(): void {
     this.solved = true;
-    this.localstorageService.saveScore(100, 'Gaston', 'Easy', 100, '2021-05-04 08:08:00', '2021-05-04 08:08:00', 55, 'Won');
+    this.localstorageService.saveScore(this.randomIntFromInterval(0, 100),
+      'Gaston', 'Easy', this.randomIntFromInterval(0, 100), '2021-05-04 08:08:00', '2021-05-04 08:08:00',
+      this.randomIntFromInterval(0, 3600), 'Won');
   }
 }
