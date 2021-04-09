@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Square, ISquare } from '../../models/square';
+import { LocalstorageService } from '../../services/localstorage.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class MinesweeperComponent implements OnInit {
   availableFlags = 9;
   solved = false;
 
-  constructor() {
+  constructor(private localstorageService: LocalstorageService) {
     this.field = [];
   }
 
@@ -106,6 +107,7 @@ export class MinesweeperComponent implements OnInit {
       if (this.field[row][col].value === 9) {
         this.field.forEach(arr => { arr.forEach(a => a.status = 'visible'); });
         this.field[row][col].status = 'detonated detonation';
+        this.localstorageService.saveScore(100, 'Gaston', 'Easy', 100, '2021-05-04 08:08:00', '2021-05-04 08:08:00', 55, 'Lost');
       } else {
         this.evaluateSolution();
       }
@@ -151,5 +153,6 @@ export class MinesweeperComponent implements OnInit {
   }
   solvedGame(): void {
     this.solved = true;
+    this.localstorageService.saveScore(100, 'Gaston', 'Easy', 100, '2021-05-04 08:08:00', '2021-05-04 08:08:00', 55, 'Won');
   }
 }
