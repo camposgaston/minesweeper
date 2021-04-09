@@ -99,7 +99,10 @@ export class MinesweeperComponent implements OnInit {
 
       if (this.field[row][col].value === 0) {
         this.showAdjSquares(this.field[row][col].showsAdj);
+        this.availableFlags = this.mines;
+        this.field.forEach(arr => { this.availableFlags -= arr.filter(s => s.status === 'hidden flagged').length; });
       }
+
       if (this.field[row][col].value === 9) {
         this.field.forEach(arr => { arr.forEach(a => a.status = 'visible'); });
         this.field[row][col].status = 'detonated detonation';
