@@ -1,1 +1,28 @@
-<p>finished-games-list works!</p>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Position</th>
+            <th scope="col">Score</th>
+            <th scope="col">Player</th>
+            <th scope="col">Level</th>
+            <th scope="col">Difficulty</th>
+            <th scope="col">Status</th>
+            <th scope="col">SpentTime</th>
+            <th scope="col">StartTime</th>
+            <th scope="col">EndTime</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let score of sortedScores; index as i">
+            <th scope="row">{{i+1}}</th>
+            <th>{{score.score}}</th>
+            <td>{{score.player}}</td>
+            <td>{{score.level}}</td>
+            <td>{{score.difficulty}}</td>
+            <td>{{score.status}}</td>
+            <td>{{score.spentTime}}</td>
+            <td>{{score.startTime}}</td>
+            <td>{{score.endTime}}</td>
+        </tr>
+    </tbody>
+</table>

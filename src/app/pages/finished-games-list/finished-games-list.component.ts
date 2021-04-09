@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import { LocalstorageService } from 'src/app/services/localstorage.service';
+import { IScore, Score } from '../../models/score';
 @Component({
   selector: 'app-finished-games-list',
   templateUrl: './finished-games-list.component.html',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FinishedGamesListComponent implements OnInit {
 
-  constructor() { }
+  public scores: IScore[] = [];
+  public sortedScores: IScore[] = [];
+  constructor(private localstorageService: LocalstorageService) { }
 
   ngOnInit(): void {
+    this.scores = this.localstorageService.scores;
+    this.sortedScores = [...this.scores.filter(a => a.status === 'Won')].sort((a, b) => a.score - b.score);
+    this.sortedScores = [...this.sortedScores, ...this.scores.filter(a => a.status === 'Lost').sort((a, b) => a.score - b.score)];
   }
-
 }
