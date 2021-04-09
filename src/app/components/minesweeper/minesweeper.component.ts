@@ -94,7 +94,7 @@ export class MinesweeperComponent implements OnInit {
   }
 
   uncover(row: number, col: number): void {
-    if (this.field[row][col].status === 'hidden') {
+    if (this.field[row][col].status === 'hidden' && !this.solved) {
       this.field[row][col].status = 'visible';
 
       if (this.field[row][col].value === 0) {
