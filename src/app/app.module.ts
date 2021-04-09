@@ -9,6 +9,7 @@ import { MinesweeperComponent } from './components/minesweeper/minesweeper.compo
 import { GameSetupComponent } from './pages/game-setup/game-setup.component';
 import { GameBoardComponent } from './pages/game-board/game-board.component';
 import { FinishedGamesListComponent } from './pages/finished-games-list/finished-games-list.component';
+import { HeaderComponent } from './shared/header/header.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FinishedGamesListComponent } from './pages/finished-games-list/finished
     MinesweeperComponent,
     GameSetupComponent,
     GameBoardComponent,
-    FinishedGamesListComponent
+    FinishedGamesListComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
