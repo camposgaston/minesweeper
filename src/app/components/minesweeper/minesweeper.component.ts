@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Square } from '../../models/square';
+import { Square, ISquare } from '../../models/square';
 
 
 @Component({
@@ -12,7 +12,7 @@ export class MinesweeperComponent implements OnInit {
   rows = 10;
   cols = 10;
   mines = 9;
-  field: any[][];
+  field: ISquare[][];
   adjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   activeMines = 9;
   solved = false;
