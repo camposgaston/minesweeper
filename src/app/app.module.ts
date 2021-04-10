@@ -10,6 +10,7 @@ import { GameSetupComponent } from './pages/game-setup/game-setup.component';
 import { GameBoardComponent } from './pages/game-board/game-board.component';
 import { FinishedGamesListComponent } from './pages/finished-games-list/finished-games-list.component';
 import { HeaderComponent } from './shared/header/header.component';
+import { ShowTimePipe } from './pipes/show-time.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HeaderComponent } from './shared/header/header.component';
     GameSetupComponent,
     GameBoardComponent,
     FinishedGamesListComponent,
-    HeaderComponent
+    HeaderComponent,
+    ShowTimePipe
   ],
   imports: [
     BrowserModule,
