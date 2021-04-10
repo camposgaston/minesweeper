@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Square, ISquare } from '../../models/square';
-import { LocalstorageService } from '../../services/localstorage.service';
+import { LocalstorageService, } from '../../services/localstorage.service';
+import { TimeManagerService } from '../../services/time-manager.service';
 
 
 @Component({
@@ -8,7 +10,7 @@ import { LocalstorageService } from '../../services/localstorage.service';
   templateUrl: './minesweeper.component.html',
   styleUrls: ['./minesweeper.component.scss']
 })
-export class MinesweeperComponent implements OnInit {
+export class MinesweeperComponent implements OnInit, OnDestroy {
   // default start values
   rows = 10;
   cols = 10;
@@ -17,13 +19,24 @@ export class MinesweeperComponent implements OnInit {
   adjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   availableFlags = 9;
   solved = false;
+  startTime = '';
+  endTime = '';
+  playerName = '';
+  timerValue = 0;
+  spentTime = 0;
+  timerSubscription: Subscription | undefined;
 
-  constructor(private localstorageService: LocalstorageService) {
+  constructor(private localstorageService: LocalstorageService,
+    private timeManagerService: TimeManagerService) {
     this.field = [];
   }
 
   ngOnInit(): void {
     this.createField();
+  }
+
+  ngOnDestroy(): void {
+    this.timerSubscription?.unsubscribe();
   }
 
   createField(): void {
@@ -95,6 +108,10 @@ export class MinesweeperComponent implements OnInit {
   }
 
   uncover(row: number, col: number): void {
+    if (!this.startTime) {
+      this.startTime = this.timeManagerService.now;
+      this.timerSubscription = this.timeManagerService.countSeconds$.subscribe((data: number) => this.timerValue = data);
+    }
     if (this.field[row][col].status === 'hidden' && !this.solved) {
       this.field[row][col].status = 'visible';
 
@@ -105,11 +122,9 @@ export class MinesweeperComponent implements OnInit {
       }
 
       if (this.field[row][col].value === 9) {
+        this.finishedGame('Lost');
         this.field.forEach(arr => { arr.forEach(a => a.status = 'visible'); });
         this.field[row][col].status = 'detonated detonation';
-        this.localstorageService.saveScore(this.randomIntFromInterval(0, 100),
-          'Gaston', 'Easy', this.randomIntFromInterval(0, 100), '2021-05-04 08:08:00', '2021-05-04 08:08:00',
-          this.randomIntFromInterval(0, 3600), 'Lost');
       } else {
         this.evaluateSolution();
       }
@@ -150,13 +165,16 @@ export class MinesweeperComponent implements OnInit {
       });
     });
     if (evalSolved) {
-      this.solvedGame();
+      this.solved = true;
+      this.finishedGame('Won');
     }
   }
-  solvedGame(): void {
-    this.solved = true;
+
+  finishedGame(status: 'Won' | 'Lost'): void {
+    this.spentTime = this.timerValue;
+    this.endTime = this.timeManagerService.now;
     this.localstorageService.saveScore(this.randomIntFromInterval(0, 100),
-      'Gaston', 'Easy', this.randomIntFromInterval(0, 100), '2021-05-04 08:08:00', '2021-05-04 08:08:00',
-      this.randomIntFromInterval(0, 3600), 'Won');
+      this.playerName, 'Easy', this.randomIntFromInterval(0, 100), this.startTime, this.endTime, this.spentTime, status);
+    this.timerSubscription?.unsubscribe();
   }
 }
