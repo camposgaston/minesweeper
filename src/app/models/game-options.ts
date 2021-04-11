@@ -4,6 +4,7 @@ export interface IGameOptions {
     rows: number;
     cols: number;
     mines: number;
+    level: 'Easy' | 'Medium' | 'Hard' | 'Defined by Player';
 }
 
 // export class GameOptions {

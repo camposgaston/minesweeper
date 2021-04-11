@@ -31,8 +31,9 @@ export class LocalstorageService {
     localStorage.setItem('scores', JSON.stringify([...this.scores, newScore]));
   }
 
-  setGameOptions(namePlayer1: string, namePlayer2: string, rows: number, cols: number, mines: number): void {
-    const gameOptions: IGameOptions[] = [{ namePlayer1, namePlayer2, rows, cols, mines }];
+  setGameOptions(namePlayer1: string, namePlayer2: string, rows: number, cols: number, mines: number,
+    level: 'Easy' | 'Medium' | 'Hard' | 'Defined by Player'): void {
+    const gameOptions: IGameOptions[] = [{ namePlayer1, namePlayer2, rows, cols, mines, level }];
     localStorage.setItem('gameOptions', JSON.stringify(gameOptions));
   };
 
