@@ -74,7 +74,8 @@ export class GameSetupComponent implements OnInit {
       const mines = levelSelected?.mines ?
         levelSelected?.mines :
         this.forma.controls.mines.value > rows * cols / 2 ? rows * cols / 2 : this.forma.controls.mines.value;
-      this.localstorageService.setNewGame(this.forma.controls.namePlayer1.value, this.forma.controls.namePlayer2.value, rows, cols, mines);
+      // eslint-disable-next-line max-len
+      this.localstorageService.setGameOptions(this.forma.controls.namePlayer1.value, this.forma.controls.namePlayer2.value, rows, cols, mines);
       this.router.navigateByUrl('/game-board');
     }
   }
