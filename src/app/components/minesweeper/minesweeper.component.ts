@@ -17,6 +17,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   rows = 10;
   cols = 10;
   mines = 9;
+  level: 'Easy' | 'Medium' | 'Hard' | 'Defined by Player' = 'Medium';
   field: ISquare[][];
   adjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   availableFlags = 9;
@@ -51,6 +52,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.cols = gameOptions.cols;
     this.mines = gameOptions.mines;
     this.playerName = gameOptions.namePlayer1;
+    this.level = gameOptions.level;
 
     for (let row = 0; row < this.rows; row++) {
       this.field[row] = [];
@@ -186,7 +188,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.spentTime = this.timerValue;
     this.endTime = this.timeManagerService.now;
     this.localstorageService.saveScore(this.randomIntFromInterval(0, 100),
-      this.playerName, 'Easy', this.randomIntFromInterval(0, 100), this.startTime, this.endTime, this.spentTime, status);
+      this.playerName, this.level, this.randomIntFromInterval(0, 100), this.startTime, this.endTime, this.spentTime, status);
     this.timerSubscription?.unsubscribe();
   }
 }
