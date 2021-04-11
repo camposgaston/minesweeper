@@ -1,6 +1,5 @@
 <div class="container">
-    <h2 class="mb-5 text-center">Game Setup</h2>
-    <hr>
+    <h2 class="mb-3 mt-3 text-center">Game Setup</h2>
     <form autocomplete="off" [formGroup]="forma" (ngSubmit)="setup()">
 
 
@@ -21,7 +20,10 @@
             </div>
             <div class="col-3">
                 <div class="form-group row">
-                    <label class="col-10 col-form-label"><input (click)="namePlayer2ControlStatus()" formControlName="multiplayer" type="checkbox" name="multiplayer" id="multiplayer">Multiplayer</label>
+                    <label class="col-10 col-form-label">
+                        <input (click)="namePlayer2ControlStatus()" formControlName="multiplayer" type="checkbox" name="multiplayer" id="multiplayer"> 
+                        <span class="ml-1">Multiplayer</span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -79,16 +81,5 @@
           </button>
             </div>
         </div>
-
-
     </form>
-    <hr>
-    <div>
-        Form Validation: {{forma.valid}}
-        <br> Status: {{forma.status}}
-    </div>
-    <div>
-
-        {{ forma.errors | json }}
-    </div>
 </div>
