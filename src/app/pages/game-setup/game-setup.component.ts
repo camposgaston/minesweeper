@@ -29,6 +29,12 @@ export class GameSetupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.forma.controls.namePlayer2.disable();
+  }
+
+  namePlayer2ControlStatus() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    this.forma.controls.multiplayer.value ? this.forma.controls.namePlayer2.disable() : this.forma.controls.namePlayer2.enable();
   }
 
   get invalidNamePlayer1(): boolean | undefined {
