@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Score, IScore } from '../models/score';
+import { IGameOptions } from '../models/game-options';
 
 
 @Injectable({
@@ -30,10 +31,14 @@ export class LocalstorageService {
     localStorage.setItem('scores', JSON.stringify([...this.scores, newScore]));
   }
 
-  setGameOptions(namePlayer1: string, namePlayer2: string, rows: number, cols: number, mines: number) {
-    const gameOptions = { namePlayer1, namePlayer2, rows, cols, mines };
+  setGameOptions(namePlayer1: string, namePlayer2: string, rows: number, cols: number, mines: number): void {
+    const gameOptions: IGameOptions[] = [{ namePlayer1, namePlayer2, rows, cols, mines }];
     localStorage.setItem('gameOptions', JSON.stringify(gameOptions));
   };
+
+  get gameOptions(): IGameOptions[] {
+    return localStorage.getItem('gameOptions') ? JSON.parse(localStorage.getItem('gameOptions') || '') : [];
+  }
 
 }
 
