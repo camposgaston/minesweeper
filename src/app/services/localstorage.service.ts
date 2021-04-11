@@ -30,6 +30,11 @@ export class LocalstorageService {
     localStorage.setItem('scores', JSON.stringify([...this.scores, newScore]));
   }
 
+  setNewGame(namePlayer1: string, namePlayer2: string, rows: number, cols: number, mines: number) {
+    const gameOptions = { namePlayer1, namePlayer2, rows, cols, mines };
+    localStorage.setItem('gameOptions', JSON.stringify(gameOptions));
+  };
+
 }
 
 
