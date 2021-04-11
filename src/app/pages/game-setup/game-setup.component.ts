@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LocalstorageService } from '../../services/localstorage.service';
 
 @Component({
   selector: 'app-game-setup',
@@ -24,7 +26,7 @@ export class GameSetupComponent implements OnInit {
   { name: 'Hard', rows: 20, cols: 24, mines: 99 },
   { name: 'Defined by Player' }];
 
-  constructor(private fb: FormBuilder,) {
+  constructor(private fb: FormBuilder, private localstorageService: LocalstorageService, private router: Router) {
 
   }
 
@@ -65,9 +67,15 @@ export class GameSetupComponent implements OnInit {
         }
         control.markAsTouched();
       });
+    } else {
+      const levelSelected = this.levels.find(l => l.name === this.forma.controls.level.value);
+      const cols = levelSelected?.cols ? levelSelected?.cols : this.forma.controls.cols.value;
+      const rows = levelSelected?.rows ? levelSelected?.rows : this.forma.controls.rows.value;
+      const mines = levelSelected?.mines ?
+        levelSelected?.mines :
+        this.forma.controls.mines.value > rows * cols / 2 ? rows * cols / 2 : this.forma.controls.mines.value;
+      this.localstorageService.setNewGame(this.forma.controls.namePlayer1.value, this.forma.controls.namePlayer2.value, rows, cols, mines);
+      this.router.navigateByUrl('/game-board');
     }
   }
-
-
-
 }
