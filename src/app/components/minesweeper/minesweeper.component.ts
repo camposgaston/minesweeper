@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { IGameOptions } from 'src/app/models/game-options';
 import { Square, ISquare } from '../../models/square';
 import { LocalstorageService, } from '../../services/localstorage.service';
 import { TimeManagerService } from '../../services/time-manager.service';
@@ -26,13 +28,16 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   spentTime = 0;
   timerSubscription: Subscription | undefined;
 
-  constructor(private localstorageService: LocalstorageService,
-    private timeManagerService: TimeManagerService) {
+  constructor(
+    private localstorageService: LocalstorageService,
+    private timeManagerService: TimeManagerService,
+    private router: Router) {
     this.field = [];
   }
 
   ngOnInit(): void {
-    this.createField();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    this.localstorageService.gameOptions.length === 0 ? this.router.navigateByUrl('/game-setup') : this.createField();
   }
 
   ngOnDestroy(): void {
@@ -40,6 +45,13 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   }
 
   createField(): void {
+    const gameOptions: IGameOptions = this.localstorageService.gameOptions[0];
+
+    this.rows = gameOptions.rows;
+    this.cols = gameOptions.cols;
+    this.mines = gameOptions.mines;
+    this.playerName = gameOptions.namePlayer1;
+
     for (let row = 0; row < this.rows; row++) {
       this.field[row] = [];
       for (let col = 0; col < this.cols; col++) {
