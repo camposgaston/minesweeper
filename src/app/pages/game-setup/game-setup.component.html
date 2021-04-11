@@ -1,1 +1,94 @@
-<p>game-setup works!</p>
+<div class="container">
+    <h2 class="mb-5 text-center">Game Setup</h2>
+    <hr>
+    <form autocomplete="off" [formGroup]="forma" (ngSubmit)="setup()">
+
+
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Player 1 Name</label>
+            <div class="col">
+
+                <input class="form-control" type="text" placeholder="Player 1 Name" formControlName="namePlayer1" [class.is-invalid]="invalidNamePlayer1">
+                <small *ngIf="invalidNamePlayer1" class="form-text text-danger">Player name must be at least 5 characters long</small>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Level</label>
+            <div class="col-3">
+                <select formControlName="level" class="form-control"><option *ngFor="let level of levels" [value]="level.name">{{level.name}}</option></select>
+            </div>
+            <div class="col-3">
+                <div class="form-group row">
+                    <label class="col-10 col-form-label"><input formControlName="multiplayer" type="checkbox" name="multiplayer" id="multiplayer">Multiplayer</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" *ngIf="forma.value.multiplayer">
+            <label class="col-2 col-form-label">Player 2 Name</label>
+            <div class="col">
+                <input class="form-control" type="text" placeholder="Player 2 Name" formControlName="namePlayer2" [class.is-invalid]="invalidNamePlayer2">
+                <small *ngIf="invalidNamePlayer2" class="form-text text-danger">Player name must be at least 5 characters long</small>
+            </div>
+        </div>
+
+        <div class="form-group row" *ngIf="forma.value.level === 'Defined by Player'">
+            <label class=" col-2 col-form-label">Quantities:</label>
+            <div class="col-3">
+                <div class="form-group row">
+                    <label class="col-6 col-form-label">Rows:</label>
+                    <div class="col-6">
+                        <input class="form-control" [class.is-invalid]="invalidRows" type="number" placeholder="Rows" formControlName="rows" min="8" max="20">
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group row">
+                    <label class="col-6 col-form-label">Columns:</label>
+                    <div class="col-6">
+                        <input class="form-control" [class.is-invalid]="invalidCols" type="number" placeholder="Columns" formControlName="cols" min="10" max="24">
+                    </div>
+                </div>
+            </div>
+            <div class="col-3" *ngIf="forma.value.cols> 0 && forma.value.rows > 0">
+                <div class="form-group row">
+                    <label class="col-6 col-form-label">Mines:</label>
+                    <div class="col-6">
+                        <input class="form-control" [class.is-invalid]="invalidMines" type="number" placeholder="Mines" formControlName="mines" min="10" [max]="forma.value.cols *forma.value.rows/2">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center">
+                <small *ngIf="invalidRows" class="form-text text-danger">Row quantity must be between 8 and 20</small>
+            </div>
+            <div class="col-12 d-flex justify-content-center">
+                <small *ngIf="invalidCols" class="form-text text-danger">Columns quantity must be between 10 and 24</small>
+            </div>
+            <div class="col-12 d-flex justify-content-center">
+                <small *ngIf="invalidMines" class="form-text text-danger">Mines quantity must be between 10 and half the amount of squares in the grid</small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">&nbsp;</label>
+            <div class="input-group col">
+                <button type="submit" class="btn btn-outline-primary btn-block">
+            Guardar
+          </button>
+            </div>
+        </div>
+
+
+    </form>
+    <hr>
+    <div>
+        Form Validation: {{forma.valid}}
+        <br> Status: {{forma.status}}
+    </div>
+    <div>
+
+        {{ forma.errors | json }}
+    </div>
+</div>
