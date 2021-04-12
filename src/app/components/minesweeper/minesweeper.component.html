@@ -1,17 +1,46 @@
-<table>
-    <tbody>
-        <tr class="data">
-            <td> Player: PLayer Name</td>
-            <td> Remaining <i class="fa fa-flag"></i> {{availableFlags}}</td>
-            <td> time {{timerValue | showTime}}</td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <tbody>
-        <tr *ngFor="let row of field; index as i;">
-            <td [ngClass]="getClasses(square.value,square.status)" (contextmenu)="flag(i,j)" oncontextmenu="return false" (click)="uncover(i,j)" *ngFor="let square of field[i]; index as j;">
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12" *ngIf="!gameFinished">
+
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <table>
+                        <tbody>
+                            <tr class="data">
+                                <td> Player: {{playerName}}</td>
+                                <td> Remaining <i class="fa fa-flag"></i> {{availableFlags}}</td>
+                                <td> time {{timerValue | showTime}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <table>
+                <tbody>
+                    <tr *ngFor="let row of field; index as i;">
+                        <td [ngClass]="getClasses(square.value,square.status)" (contextmenu)="flag(i,j)" oncontextmenu="return false" (click)="uncover(i,j)" *ngFor="let square of field[i]; index as j;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div *ngIf="gameFinished" class="col-12 d-flex justify-content-center alert centered" [ngClass]="{'alert-success': solved,'alert-danger':!solved}" role="alert">
+            <table>
+                <tr>
+                    <td>
+                        <span *ngIf="solved">Congratulations!!!! you won level {{level}} in {{timerValue | showTime}}!</span>
+                        <span *ngIf="!solved">Game Over, Man!</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button alert-button block" class="btn btn-primary" (click)="playAgain()">Play Again</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

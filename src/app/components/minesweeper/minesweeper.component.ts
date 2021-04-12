@@ -22,6 +22,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   adjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   availableFlags = 9;
   solved = false;
+  gameFinished = false;
   startTime = '';
   endTime = '';
   playerName = '';
@@ -48,13 +49,17 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
 
   createField(): void {
     const gameOptions: IGameOptions = this.localstorageService.gameOptions[0];
-
+    this.timerValue = 0;
+    this.spentTime = 0;
+    this.startTime = '';
+    this.endTime = '';
     this.rows = gameOptions.rows;
     this.cols = gameOptions.cols;
     this.mines = gameOptions.mines;
     this.playerName = gameOptions.namePlayer1;
     this.level = gameOptions.level;
 
+    this.field = [];
     for (let row = 0; row < this.rows; row++) {
       this.field[row] = [];
       for (let col = 0; col < this.cols; col++) {
@@ -65,6 +70,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.calculateAdjMines();
     this.calculateAllAdjToShow();
     this.availableFlags = this.mines;
+    this.gameFinished = false;
   }
 
   randomIntFromInterval(min: number, max: number): number {
@@ -189,6 +195,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   finishedGame(status: 'Won' | 'Lost'): void {
     this.spentTime = this.timerValue;
     this.endTime = this.timeManagerService.now;
+    this.gameFinished = true;
     const minesDensity = this.mines / (this.rows * this.cols);
     const difficulty = minesDensity * this.mines;
     const uncoveredNonBombSquaresPerc = status === 'Won' ? 1 : this.uncoveredNonBombSquares / (this.rows * this.cols);
@@ -198,5 +205,8 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.localstorageService.saveScore(score, this.playerName, this.level,
       difficulty, this.startTime, this.endTime, this.spentTime, status);
     this.timerSubscription?.unsubscribe();
+  }
+  playAgain() {
+    this.ngOnInit();
   }
 }
