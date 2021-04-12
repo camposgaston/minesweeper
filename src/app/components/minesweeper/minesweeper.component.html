@@ -53,5 +53,9 @@
             <button type="button alert-button block" class="btn btn-primary" (click)="newGameSameoptions()">Start New Game</button>
         </div>
 
+        <div *ngIf="gameStatus==='Waiting Player'" class=" alert-dangercol-12 d-flex justify-content-center alert" role="alert alert-success">
+            <button type="button alert-button block" class="btn btn-primary" (click)="settings()">Set Player 2 Name</button>
+        </div>
+
     </div>
 </div>

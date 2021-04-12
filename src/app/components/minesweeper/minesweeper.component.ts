@@ -36,7 +36,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
 
 
 
-  gameStatus: 'On Hold Finished' | 'On Hold Ready' | 'Finished' | 'Paused' | 'Playing' | 'Ready' = 'Ready';
+  gameStatus: 'On Hold Finished' | 'On Hold Ready' | 'Finished' | 'Paused' | 'Playing' | 'Ready' | 'Waiting Player' = 'Ready';
   constructor(
     private localstorageService: LocalstorageService,
     private timeManagerService: TimeManagerService,
@@ -49,7 +49,9 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this.localstorageService.gameOptions.length === 0 ? this.router.navigateByUrl('/game-setup') :
-      this.player2 === this.localstorageService.savedGame[2] ? this.gameStatus = 'Paused' : this.createField();
+      this.localstorageService.gameOptions[0].namePlayer2 === '' && this.player2 ? this.gameStatus = 'Waiting Player' :
+        this.player2 === this.localstorageService.savedGame[2] ? this.gameStatus = 'Paused' :
+          this.createField();
 
     this.communicationService.events$.forEach((event: IEvent) => {
       if (event.name === 'waitForTheOtherPlayer' && event.player2Addressed === !this.player2) {
@@ -256,5 +258,9 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.localstorageService.pauseGame(this.timerValue, this.field, this.player2);
     this.timerSubscription?.unsubscribe();
     this.gameStatus = 'Paused';
+  }
+
+  settings() {
+    this.router.navigateByUrl('/game-setup');
   }
 }
