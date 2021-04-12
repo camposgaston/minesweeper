@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Score, IScore } from '../models/score';
 import { IGameOptions } from '../models/game-options';
+import { ISquare } from '../models/square';
 
 
 @Injectable({
@@ -35,10 +36,25 @@ export class LocalstorageService {
     level: 'Easy' | 'Medium' | 'Hard' | 'Defined by Player'): void {
     const gameOptions: IGameOptions[] = [{ namePlayer1, namePlayer2, rows, cols, mines, level }];
     localStorage.setItem('gameOptions', JSON.stringify(gameOptions));
+    this.deletePausedGameData();
   };
 
   get gameOptions(): IGameOptions[] {
     return localStorage.getItem('gameOptions') ? JSON.parse(localStorage.getItem('gameOptions') || '') : [];
+  }
+
+  pauseGame(timer: number, field: ISquare[][], player2: boolean) {
+    const pausedGameData = [timer, field, player2];
+    localStorage.setItem('gamePaused', JSON.stringify(pausedGameData));
+  }
+
+  deletePausedGameData() {
+    const deletePausedgame: [] = [];
+    localStorage.setItem('gamePaused', JSON.stringify(deletePausedgame));
+  }
+
+  get savedGame(): [number, ISquare[][], boolean] {
+    return localStorage.getItem('gamePaused') ? JSON.parse(localStorage.getItem('gamePaused') || '') : [];
   }
 
 }
