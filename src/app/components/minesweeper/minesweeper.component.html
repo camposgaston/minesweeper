@@ -1,20 +1,9 @@
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12" *ngIf="gameStatus==='Ready' || gameStatus==='Playing'">
 
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <table>
-                        <tbody>
-                            <tr class="data">
-                                <td> Player: {{playerName}}</td>
-                                <td> Remaining <i class="fa fa-flag"></i> {{availableFlags}}</td>
-                                <td> time {{timerValue | showTime}}</td>
-                                <td (click)="pauseGame()">Pause Game</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        <div class="col-12" *ngIf="gameStatus==='Ready' || gameStatus==='Playing'">
+            <div class="row">
+                <div class="col-12 justify-content-center">Player: {{playerName}} Remaining <i class="fa fa-flag"></i> {{availableFlags}} time {{timerValue | showTime}} </div>
             </div>
 
             <table>
@@ -25,36 +14,41 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="row justify-content-center">
+                <div class="col-12 justify-content-center"><button type="button alert-button block" class="btn btn-primary" (click)="pauseGame()">Pause Game</button></div>
+            </div>
         </div>
 
 
         <div *ngIf="gameStatus==='Finished'" class="col-12 d-flex justify-content-center alert" [ngClass]="{'alert-success': solved,'alert-danger':!solved}" role="alert">
-            <table>
-                <tr>
-                    <td>
-                        <span *ngIf="solved">Congratulations!!!! you won level {{level}} in {{timerValue | showTime}}!</span>
-                        <span *ngIf="!solved">Game Over, Man!</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="button alert-button block" class="btn btn-primary" (click)="playAgain()">Play Again</button>
-                    </td>
-                </tr>
-            </table>
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center mt-2 mb-2">
+                    <span *ngIf="solved">Congratulations!!!! you won level {{level}} in {{timerValue | showTime}}!</span>
+                    <span *ngIf="!solved">Game Over, Man!</span>
+                </div>
+                <div class="col-12 d-flex justify-content-center mt-2 mb-2">
+                    <button type="button alert-button" class="btn btn-primary" (click)="playAgain()">Play Again</button>
+                </div>
+            </div>
         </div>
 
         <div *ngIf="gameStatus==='On Hold Finished' || gameStatus==='On Hold Ready'" class=" alert-dangercol-12 d-flex justify-content-center alert" role="alert">
             <span>Waiting player's turn</span>
         </div>
 
-        <div *ngIf="gameStatus==='Paused'" class=" alert-dangercol-12 d-flex justify-content-center alert" role="alert alert-success">
-            <button type="button alert-button block" class="btn btn-primary" (click)="resumeGame()">Resume Saved Game</button>
-            <button type="button alert-button block" class="btn btn-primary" (click)="newGameSameoptions()">Start New Game</button>
+        <div *ngIf="gameStatus==='Paused'" class="block">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center mt-2 mb-2">
+                    <button type="button alert-button" class="block btn btn-primary" (click)="resumeGame()">Resume Paused Game</button>
+                </div>
+                <div class="col-12 d-flex justify-content-center mt-2 mb-2">
+                    <button type="button alert-button" class="block btn btn-primary" (click)="newGameSameoptions()">Start New Game</button>
+                </div>
+            </div>
         </div>
 
         <div *ngIf="gameStatus==='Waiting Player'" class=" alert-dangercol-12 d-flex justify-content-center alert" role="alert alert-success">
-            <button type="button alert-button block" class="btn btn-primary" (click)="settings()">Set Player 2 Name</button>
+            <button type="button alert-button " class="btn btn-primary" (click)="settings()">Set Player 2 Name</button>
         </div>
 
     </div>
