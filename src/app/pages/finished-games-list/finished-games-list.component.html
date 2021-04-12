@@ -15,10 +15,10 @@
     <tbody>
         <tr *ngFor="let score of sortedScores; index as i">
             <th scope="row">{{i+1}}</th>
-            <th>{{score.score}}</th>
+            <th>{{score.score| number:'1.2-2'}}</th>
             <td>{{score.player}}</td>
             <td>{{score.level}}</td>
-            <td>{{score.difficulty}}</td>
+            <td>{{score.difficulty| number:'1.2-2'}}</td>
             <td>{{score.status}}</td>
             <td>{{score.spentTime | showTime}}</td>
             <td>{{score.startTime}}</td>
