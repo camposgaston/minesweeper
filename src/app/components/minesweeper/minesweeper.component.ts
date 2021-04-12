@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IGameOptions } from 'src/app/models/game-options';
@@ -13,7 +13,8 @@ import { TimeManagerService } from '../../services/time-manager.service';
   styleUrls: ['./minesweeper.component.scss']
 })
 export class MinesweeperComponent implements OnInit, OnDestroy {
-  // default start values
+  @Input() player2 = false;
+
   rows = 10;
   cols = 10;
   mines = 9;
@@ -56,7 +57,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.rows = gameOptions.rows;
     this.cols = gameOptions.cols;
     this.mines = gameOptions.mines;
-    this.playerName = gameOptions.namePlayer1;
+    this.playerName = this.player2 ? gameOptions.namePlayer2 : gameOptions.namePlayer1;
     this.level = gameOptions.level;
 
     this.field = [];
