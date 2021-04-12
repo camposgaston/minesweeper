@@ -59,8 +59,10 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
         this.gameStatus = this.gameStatus === 'Finished' ? 'On Hold Finished' : 'On Hold Ready';
       }
       if (event.name === 'yourTurnToPlay' && event.player2Addressed === !this.player2) {
-
-        this.gameStatus = this.gameStatus === 'On Hold Finished' ? 'Finished' : 'Ready';
+        this.gameStatus = this.gameStatus === 'On Hold Finished' ?
+          'Finished' :
+          this.localstorageService.gameOptions[0].namePlayer2 === '' && this.player2 ? this.gameStatus = 'Waiting Player' :
+            'Ready';
       }
     });
 
