@@ -25,7 +25,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   adjPositions: number[][] = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
   availableFlags = 9;
   solved = false;
-  gameFinished = false;
+
   startTime = '';
   endTime = '';
   playerName = '';
@@ -33,8 +33,10 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   spentTime = 0;
   uncoveredNonBombSquares = 0;
   timerSubscription: Subscription | undefined;
-  gameOnHold = false;
 
+
+
+  gameStatus: 'On Hold Finished' | 'On Hold Ready' | 'Finished' | 'Paused' | 'Playing' | 'Ready' = 'Ready';
   constructor(
     private localstorageService: LocalstorageService,
     private timeManagerService: TimeManagerService,
@@ -50,10 +52,12 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
 
     this.communicationService.events$.forEach((event: IEvent) => {
       if (event.name === 'waitForTheOtherPlayer' && event.player2Addressed === !this.player2) {
-        this.gameOnHold = true;
+
+        this.gameStatus = this.gameStatus === 'Finished' ? 'On Hold Finished' : 'On Hold Ready';
       }
       if (event.name === 'yourTurnToPlay' && event.player2Addressed === !this.player2) {
-        this.gameOnHold = false;
+
+        this.gameStatus = this.gameStatus === 'On Hold Finished' ? 'Finished' : 'Ready';
       }
     });
 
@@ -86,7 +90,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.calculateAdjMines();
     this.calculateAllAdjToShow();
     this.availableFlags = this.mines;
-    this.gameFinished = false;
+    this.gameStatus = 'Ready';
   }
 
   randomIntFromInterval(min: number, max: number): number {
@@ -148,6 +152,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     if (!this.startTime) {
       this.startTime = this.timeManagerService.now;
       this.timerSubscription = this.timeManagerService.countSeconds$.subscribe((data: number) => this.timerValue = data);
+      this.gameStatus = 'Playing';
       this.communicationService.sendSimpleEvent('waitForTheOtherPlayer', this.player2);
     }
     if (this.field[row][col].status === 'hidden' && !this.solved) {
@@ -212,7 +217,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   finishedGame(status: 'Won' | 'Lost'): void {
     this.spentTime = this.timerValue;
     this.endTime = this.timeManagerService.now;
-    this.gameFinished = true;
+    this.gameStatus = 'Finished';
     const minesDensity = this.mines / (this.rows * this.cols);
     const difficulty = minesDensity * this.mines;
     const uncoveredNonBombSquaresPerc = status === 'Won' ? 1 : this.uncoveredNonBombSquares / (this.rows * this.cols);
