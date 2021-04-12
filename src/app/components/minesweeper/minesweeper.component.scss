@@ -9,11 +9,12 @@ tr {
 }
 
 td {
-    width: 17px;
-    height: 17px;
+    $squareSize: 20px;
+    width: $squareSize;
+    height: $squareSize;
     border: 0.1px solid black;
     text-align: center;
-    font-size: 10px;
+    font-size: $squareSize - 9px;
     &.visible {
         $squareColors: ( 0: yellow, 1: DodgerBlue, 2: MediumSeaGreen, 3: Orange, 4: SlateBlue, 5: LightGray, 6: rgb(44, 89, 102), 7: Tomato, 8: red, 9: black, );
         @each $name,
