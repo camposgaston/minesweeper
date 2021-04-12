@@ -5,6 +5,8 @@ import { IGameOptions } from 'src/app/models/game-options';
 import { Square, ISquare } from '../../models/square';
 import { LocalstorageService, } from '../../services/localstorage.service';
 import { TimeManagerService } from '../../services/time-manager.service';
+import { CommunicationService } from '../../services/communication.service';
+import { IEvent } from '../../models/event';
 
 
 @Component({
@@ -31,17 +33,30 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   spentTime = 0;
   uncoveredNonBombSquares = 0;
   timerSubscription: Subscription | undefined;
+  gameOnHold = false;
 
   constructor(
     private localstorageService: LocalstorageService,
     private timeManagerService: TimeManagerService,
-    private router: Router) {
+    private router: Router,
+    private communicationService: CommunicationService
+  ) {
     this.field = [];
   }
 
   ngOnInit(): void {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this.localstorageService.gameOptions.length === 0 ? this.router.navigateByUrl('/game-setup') : this.createField();
+
+    this.communicationService.events$.forEach((event: IEvent) => {
+      if (event.name === 'waitForTheOtherPlayer' && event.player2Addressed === !this.player2) {
+        this.gameOnHold = true;
+      }
+      if (event.name === 'yourTurnToPlay' && event.player2Addressed === !this.player2) {
+        this.gameOnHold = false;
+      }
+    });
+
   }
 
   ngOnDestroy(): void {
@@ -133,6 +148,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     if (!this.startTime) {
       this.startTime = this.timeManagerService.now;
       this.timerSubscription = this.timeManagerService.countSeconds$.subscribe((data: number) => this.timerValue = data);
+      this.communicationService.sendSimpleEvent('waitForTheOtherPlayer', this.player2);
     }
     if (this.field[row][col].status === 'hidden' && !this.solved) {
       this.field[row][col].status = 'visible';
@@ -206,8 +222,9 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.localstorageService.saveScore(score, this.playerName, this.level,
       difficulty, this.startTime, this.endTime, this.spentTime, status);
     this.timerSubscription?.unsubscribe();
+    this.communicationService.sendSimpleEvent('yourTurnToPlay', this.player2);
   }
   playAgain() {
-    this.ngOnInit();
+    this.createField();
   }
 }

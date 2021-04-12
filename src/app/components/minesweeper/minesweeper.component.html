@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12" *ngIf="!gameFinished">
+        <div class="col-12" *ngIf="!gameFinished && !gameOnHold">
 
             <div class="row justify-content-center">
                 <div class="col-12">
@@ -27,7 +27,7 @@
         </div>
 
 
-        <div *ngIf="gameFinished" class="col-12 d-flex justify-content-center alert" [ngClass]="{'alert-success': solved,'alert-danger':!solved}" role="alert">
+        <div *ngIf="gameFinished && !gameOnHold" class="col-12 d-flex justify-content-center alert" [ngClass]="{'alert-success': solved,'alert-danger':!solved}" role="alert">
             <table>
                 <tr>
                     <td>
@@ -42,5 +42,10 @@
                 </tr>
             </table>
         </div>
+
+        <div *ngIf="gameOnHold" class=" alert-dangercol-12 d-flex justify-content-center alert" role="alert">
+            <span>Waiting player's turn</span>
+        </div>
+
     </div>
 </div>
