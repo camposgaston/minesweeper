@@ -137,8 +137,8 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
       }
 
       if (this.field[row][col].value === 9) {
-        this.finishedGame('Lost');
         this.field.forEach(arr => { this.uncoveredNonBombSquares += arr.filter(s => s.status === 'visible').length; });
+        this.finishedGame('Lost');
         this.field.forEach(arr => { arr.forEach(a => a.status = 'visible'); });
         this.field[row][col].status = 'detonated detonation';
       } else {
