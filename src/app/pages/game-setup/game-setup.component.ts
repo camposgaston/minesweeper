@@ -77,7 +77,7 @@ export class GameSetupComponent implements OnInit {
 
       this.localstorageService.setGameOptions(this.forma.controls.namePlayer1.value,
         this.forma.controls.namePlayer2.value, rows, cols, mines, this.forma.controls.level.value);
-      this.router.navigateByUrl('/game-board');
+      this.router.navigate(['game-board']);
     }
   }
 }

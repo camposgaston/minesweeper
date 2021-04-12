@@ -48,7 +48,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    this.localstorageService.gameOptions.length === 0 ? this.router.navigateByUrl('/game-setup') :
+    this.localstorageService.gameOptions.length === 0 ? this.router.navigate(['game-setup']) :
       this.localstorageService.gameOptions[0].namePlayer2 === '' && this.player2 ? this.gameStatus = 'Waiting Player' :
         this.player2 === this.localstorageService.savedGame[2] ? this.gameStatus = 'Paused' :
           this.createField();
@@ -263,6 +263,6 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   }
 
   settings() {
-    this.router.navigateByUrl('/game-setup');
+    this.router.navigate(['game-setup']);
   }
 }
