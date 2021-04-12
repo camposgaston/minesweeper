@@ -14,7 +14,8 @@ td {
     height: $squareSize;
     border: 0.1px solid black;
     text-align: center;
-    font-size: $squareSize - 9px;
+    font-size: $squareSize - 7px;
+    padding: 0;
     &.visible {
         $squareColors: ( 0: yellow, 1: DodgerBlue, 2: MediumSeaGreen, 3: Orange, 4: SlateBlue, 5: LightGray, 6: rgb(44, 89, 102), 7: Tomato, 8: red, 9: black, );
         @each $name,
