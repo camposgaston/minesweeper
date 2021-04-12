@@ -10,6 +10,7 @@
                                 <td> Player: {{playerName}}</td>
                                 <td> Remaining <i class="fa fa-flag"></i> {{availableFlags}}</td>
                                 <td> time {{timerValue | showTime}}</td>
+                                <td (click)="pauseGame()">Pause Game</td>
                             </tr>
                         </tbody>
                     </table>
@@ -45,6 +46,11 @@
 
         <div *ngIf="gameStatus==='On Hold Finished' || gameStatus==='On Hold Ready'" class=" alert-dangercol-12 d-flex justify-content-center alert" role="alert">
             <span>Waiting player's turn</span>
+        </div>
+
+        <div *ngIf="gameStatus==='Paused'" class=" alert-dangercol-12 d-flex justify-content-center alert" role="alert alert-success">
+            <button type="button alert-button block" class="btn btn-primary" (click)="resumeGame()">Resume Saved Game</button>
+            <button type="button alert-button block" class="btn btn-primary" (click)="newGameSameoptions()">Start New Game</button>
         </div>
 
     </div>

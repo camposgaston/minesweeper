@@ -48,7 +48,8 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    this.localstorageService.gameOptions.length === 0 ? this.router.navigateByUrl('/game-setup') : this.createField();
+    this.localstorageService.gameOptions.length === 0 ? this.router.navigateByUrl('/game-setup') :
+      this.player2 === this.localstorageService.savedGame[2] ? this.gameStatus = 'Paused' : this.createField();
 
     this.communicationService.events$.forEach((event: IEvent) => {
       if (event.name === 'waitForTheOtherPlayer' && event.player2Addressed === !this.player2) {
@@ -229,7 +230,31 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
     this.timerSubscription?.unsubscribe();
     this.communicationService.sendSimpleEvent('yourTurnToPlay', this.player2);
   }
+
   playAgain() {
     this.createField();
+  }
+
+  resumeGame() {
+    const savedGame = this.localstorageService.savedGame;
+    if (this.player2 === savedGame[2]) {
+      this.timerValue = savedGame[0] - 1;
+      this.field = savedGame[1];
+      this.gameStatus = 'Playing';
+      this.timerSubscription = this.timeManagerService.countSeconds$.subscribe((data: number) => this.timerValue++);
+    } else {
+      this.newGameSameoptions();
+    }
+  }
+
+  newGameSameoptions() {
+    this.gameStatus = 'Ready';
+    this.createField();
+  }
+
+  pauseGame() {
+    this.localstorageService.pauseGame(this.timerValue, this.field, this.player2);
+    this.timerSubscription?.unsubscribe();
+    this.gameStatus = 'Paused';
   }
 }
