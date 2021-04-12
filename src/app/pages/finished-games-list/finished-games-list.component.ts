@@ -14,7 +14,7 @@ export class FinishedGamesListComponent implements OnInit {
 
   ngOnInit(): void {
     this.scores = this.localstorageService.scores;
-    this.sortedScores = [...this.scores.filter(a => a.status === 'Won')].sort((a, b) => a.score - b.score);
-    this.sortedScores = [...this.sortedScores, ...this.scores.filter(a => a.status === 'Lost').sort((a, b) => a.score - b.score)];
+    this.sortedScores = [...this.scores.filter(a => a.status === 'Won')].sort((a, b) => b.score - a.score);
+    this.sortedScores = [...this.sortedScores, ...[...this.scores.filter(a => a.status === 'Lost')].sort((a, b) => b.score - a.score)];
   }
 }
