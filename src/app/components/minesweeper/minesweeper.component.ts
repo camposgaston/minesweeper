@@ -27,6 +27,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   playerName = '';
   timerValue = 0;
   spentTime = 0;
+  uncoveredNonBombSquares = 0;
   timerSubscription: Subscription | undefined;
 
   constructor(
@@ -137,6 +138,7 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
 
       if (this.field[row][col].value === 9) {
         this.finishedGame('Lost');
+        this.field.forEach(arr => { this.uncoveredNonBombSquares += arr.filter(s => s.status === 'visible').length; });
         this.field.forEach(arr => { arr.forEach(a => a.status = 'visible'); });
         this.field[row][col].status = 'detonated detonation';
       } else {
@@ -187,8 +189,14 @@ export class MinesweeperComponent implements OnInit, OnDestroy {
   finishedGame(status: 'Won' | 'Lost'): void {
     this.spentTime = this.timerValue;
     this.endTime = this.timeManagerService.now;
-    this.localstorageService.saveScore(this.randomIntFromInterval(0, 100),
-      this.playerName, this.level, this.randomIntFromInterval(0, 100), this.startTime, this.endTime, this.spentTime, status);
+    const minesDensity = this.mines / (this.rows * this.cols);
+    const difficulty = minesDensity * this.mines;
+    const uncoveredNonBombSquaresPerc = status === 'Won' ? 1 : this.uncoveredNonBombSquares / (this.rows * this.cols);
+    const playingTimeGivesNoPoints = 5 * 60;
+    const scoredByTime = status === 'Won' ? (1 / (this.spentTime / playingTimeGivesNoPoints)) * difficulty : 0;
+    const score = uncoveredNonBombSquaresPerc * difficulty + scoredByTime;
+    this.localstorageService.saveScore(score, this.playerName, this.level,
+      difficulty, this.startTime, this.endTime, this.spentTime, status);
     this.timerSubscription?.unsubscribe();
   }
 }
